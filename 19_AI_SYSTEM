@@ -1,0 +1,15 @@
+CLAUDE/
+├── MASTER_SYSTEM_PROMPT.md
+├── PROJECT_CONTEXT.md
+├── STRATEGIC_ANALYSIS_PROTOCOL.md
+├── DOCUMENT_ANALYSIS_PROTOCOL.md
+└── OUTPUT_STANDARDS.md
+Verified Data
+      ↓
+Claude
+      ↓
+Analysis
+      ↓
+Strategic Recommendation
+      ↓
+Human Decision
