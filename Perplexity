@@ -1,0 +1,19 @@
+PERPLEXITY/
+├── RESEARCH_PROTOCOL.md
+├── SOURCE_HIERARCHY.md
+├── FACT_CHECK_PROTOCOL.md
+├── MARKET_RESEARCH_PROMPTS.md
+└── BRAND_RESEARCH_PROMPTS.md
+Question
+   ↓
+Perplexity
+   ↓
+Sources
+   ↓
+Verification
+   ↓
+GitHub /DATA/VERIFIED
+   ↓
+Claude
+   ↓
+Strategic Analysis
