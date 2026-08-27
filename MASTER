@@ -1,0 +1,180 @@
+access-algeria/
+│
+├── 00_MASTER_CONTROL/
+│   ├── PROJECT_MASTER_CONTROL.md
+│   ├── COMPANY_IDENTITY.md
+│   ├── VISION_MISSION.md
+│   ├── STRATEGIC_OBJECTIVES.md
+│   ├── LEGAL_POSITIONING.md
+│   ├── BUSINESS_MODEL.md
+│   ├── CORE_METHODOLOGY.md
+│   └── CHANGELOG.md
+│
+├── 01_MARKET_INTELLIGENCE/
+│   ├── ALGERIA_MARKET/
+│   ├── AUTOMOTIVE/
+│   ├── LUXURY_MARKET/
+│   ├── TOURISM/
+│   ├── MACROECONOMICS/
+│   ├── CONSUMER_INTELLIGENCE/
+│   └── MARKET_TRENDS/
+│
+├── 02_BRAND_INTELLIGENCE/
+│   ├── AUTOMOTIVE/
+│   ├── LUXURY/
+│   ├── TOURISM/
+│   └── OTHER_SECTORS/
+│
+├── 03_BRAND_DATABASE/
+│   ├── MASTER_BRAND_DATABASE.csv
+│   ├── AUTOMOTIVE_BRANDS.csv
+│   ├── LUXURY_BRANDS.csv
+│   ├── TOURISM_BRANDS.csv
+│   └── BRAND_CONTACTS.csv
+│
+├── 04_MARKET_ENTRY/
+│   ├── MARKET_ENTRY_FRAMEWORK.md
+│   ├── ENTRY_MODELS.md
+│   ├── ENTRY_STAGES.md
+│   ├── MARKET_ENTRY_CHECKLIST.md
+│   ├── GO_TO_MARKET.md
+│   └── EXIT_CRITERIA.md
+│
+├── 05_OPPORTUNITY_SCORING/
+│   ├── SCORING_METHODOLOGY.md
+│   ├── SCORING_CRITERIA.md
+│   ├── BRAND_SCORES.csv
+│   ├── MARKET_ATTRACTIVENESS.md
+│   └── OPPORTUNITY_RANKING.md
+│
+├── 06_DUE_DILIGENCE/
+│   ├── BRAND_DD/
+│   ├── PARTNER_DD/
+│   ├── INVESTOR_DD/
+│   ├── LEGAL_DD/
+│   └── COMMERCIAL_DD/
+│
+├── 07_REGULATORY_INTELLIGENCE/
+│   ├── ALGERIAN_LAW/
+│   ├── INVESTMENT_REGULATIONS/
+│   ├── AUTOMOTIVE_REGULATIONS/
+│   ├── IMPORT_REGULATIONS/
+│   ├── TAXATION/
+│   └── OFFICIAL_SOURCES/
+│
+├── 08_PARTNER_ECOSYSTEM/
+│   ├── AUTOMOTIVE_PARTNERS/
+│   ├── CORPORATES/
+│   ├── BANKS/
+│   ├── INVESTORS/
+│   ├── LOGISTICS/
+│   ├── TOURISM_PARTNERS/
+│   └── TECHNOLOGY_PARTNERS/
+│
+├── 09_CONTACT_INTELLIGENCE/
+│   ├── DECISION_MAKERS.csv
+│   ├── COMPANIES.csv
+│   ├── CONTACTS.csv
+│   ├── OUTREACH_STATUS.csv
+│   └── CONTACT_SOURCES.md
+│
+├── 10_PROJECT_PIPELINE/
+│   ├── ACTIVE_PROJECTS/
+│   ├── PROSPECTIVE_PROJECTS/
+│   ├── COMPLETED_PROJECTS/
+│   └── PROJECT_TEMPLATES/
+│
+├── 11_ASTON_MARTIN/
+│   ├── MASTER_CASE/
+│   ├── BRAND_INTELLIGENCE/
+│   ├── ALGERIA_MARKET_CASE/
+│   ├── REGULATORY/
+│   ├── PARTNER_STRATEGY/
+│   ├── FINANCIAL_MODEL/
+│   ├── PITCH/
+│   ├── OUTREACH/
+│   ├── MEETING_NOTES/
+│   └── TIMELINE/
+│
+├── 12_TOURISM/
+│   ├── MARKET/
+│   ├── DESTINATIONS/
+│   ├── BUSINESS_MODELS/
+│   ├── PARTNERS/
+│   └── PROJECTS/
+│
+├── 13_FINANCIAL_MODELS/
+│   ├── ACCESS_ALGERIA/
+│   ├── PROJECT_MODELS/
+│   ├── REVENUE_MODELS/
+│   ├── COST_MODELS/
+│   └── INVESTMENT_MODELS/
+│
+├── 14_STRATEGY/
+│   ├── STRATEGIC_AUDIT.md
+│   ├── SWOT.md
+│   ├── PESTEL.md
+│   ├── COMPETITIVE_ANALYSIS.md
+│   ├── SCENARIO_PLANNING.md
+│   ├── RISK_REGISTER.md
+│   └── STRATEGIC_RECOMMENDATIONS.md
+│
+├── 15_SALES_OUTREACH/
+│   ├── EMAIL_TEMPLATES/
+│   ├── LINKEDIN/
+│   ├── PRESENTATIONS/
+│   ├── MEETING_SCRIPTS/
+│   └── FOLLOW_UP/
+│
+├── 16_REPORTS/
+│   ├── MARKET_REPORTS/
+│   ├── BRAND_REPORTS/
+│   ├── PARTNER_REPORTS/
+│   ├── INVESTMENT_REPORTS/
+│   └── EXECUTIVE_REPORTS/
+│
+├── 17_PITCH_DECKS/
+│   ├── INVESTORS/
+│   ├── INCUBATORS/
+│   ├── AAPI/
+│   ├── AUTOMOTIVE_BRANDS/
+│   └── PARTNERS/
+│
+├── 18_DATA/
+│   ├── RAW/
+│   ├── CLEAN/
+│   ├── VERIFIED/
+│   └── ARCHIVE/
+│
+├── 19_AI_SYSTEM/
+│   ├── CLAUDE/
+│   ├── PERPLEXITY/
+│   ├── GEMINI/
+│   ├── PROMPTS/
+│   └── AI_PROTOCOLS/
+│
+├── 20_KNOWLEDGE_BASE/
+│   ├── DEFINITIONS/
+│   ├── FRAMEWORKS/
+│   ├── PLAYBOOKS/
+│   ├── CASE_STUDIES/
+│   └── BEST_PRACTICES/
+│
+├── 21_OPERATIONS/
+│   ├── SOP/
+│   ├── WORKFLOWS/
+│   ├── CHECKLISTS/
+│   └── TEMPLATES/
+│
+├── 22_GOVERNANCE/
+│   ├── DATA_POLICY.md
+│   ├── SOURCE_POLICY.md
+│   ├── VERIFICATION_POLICY.md
+│   ├── CONFIDENTIALITY.md
+│   └── VERSION_CONTROL.md
+│
+├── 23_ARCHIVE/
+│
+├── README.md
+├── CONTRIBUTING.md
+└── .gitignore
