@@ -462,7 +462,7 @@ Every completed project should make the system:
 
 ## DOCUMENT CONTROL
 
-**Document:** Project Master Control
+**Document:** Project Master ControL
 
 **Version:** 1.0
 
@@ -473,3 +473,4 @@ Every completed project should make the system:
 **System Owner:** Access Algeria
 
 **Last Major Update:** 2026-08-28
+
