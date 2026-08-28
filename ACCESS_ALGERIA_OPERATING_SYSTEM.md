@@ -1,0 +1,26 @@
+PERPLEXITY
+     ↓
+RESEARCH
+     ↓
+GITHUB
+     ↓
+VERIFICATION
+     ↓
+DATA
+     ↓
+SCORING
+     ↓
+CLAUDE
+     ↓
+STRATEGY
+     ↓
+MONDAY
+     ↓
+EXECUTION
+     ↓
+RESULTS
+     ↓
+GITHUB
+     ↓
+LEARNING
+     ↺
