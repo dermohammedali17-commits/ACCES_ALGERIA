@@ -55,7 +55,7 @@ GitHub remains the source of truth for the strategic framework and supporting do
 
 ## Objective
 
-Build Access Algeria into a credible, structured and professional Market Entry and Business Development platform.
+Build Access Algeria into a credible, structured and professional B2B and B2G Market Entry, Strategic Development and Business Development platform..
 
 ## Strategic Rationale
 
