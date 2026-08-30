@@ -311,6 +311,54 @@ A strong strategy without execution discipline creates limited value.
 - Follow-up completion rate
 
 ---
+# OBJECTIVE 10 — DEVELOP STRATEGIC B2G CAPABILITY
+
+## Objective
+
+Develop the capability to engage appropriately with relevant public institutions and government ecosystem stakeholders when public-sector coordination is strategically relevant to market-entry projects.
+
+## Strategic Rationale
+
+In Algeria, major market-entry projects may involve regulatory frameworks, investment institutions, public agencies and government-related stakeholders.
+
+A structured B2G capability can help Access Algeria better understand the institutional environment and support strategic coordination without positioning the platform as a political intermediary.
+
+## Key Results
+
+- Government and institutional ecosystem mapped
+- Relevant public stakeholders identified by sector
+- Institutional engagement protocols developed
+- Public-sector intelligence integrated into market-entry assessments
+- B2G engagement standards established
+
+## Core B2G Stakeholder Categories
+
+- Investment promotion institutions
+- Relevant ministries and regulators
+- Public agencies
+- Sector-specific institutions
+- Public economic development bodies
+- Investment and business support ecosystem stakeholders
+
+## Core KPIs
+
+- Number of relevant institutional stakeholders mapped
+- Number of verified institutional intelligence records
+- Number of sectors with documented institutional pathways
+- Number of qualified institutional engagements where appropriate
+
+## Operating Principle
+
+B2G activity must remain:
+
+- Professional
+- Transparent
+- Lawful
+- Evidence-based
+- Strategically relevant
+- Properly documented
+
+Access Algeria does not rely on informal influence as a substitute for lawful processes, regulatory compliance or formal institutional engagement.
 
 # OBJECTIVE 10 — BUILD LONG-TERM COMMERCIAL CAPABILITY
 
