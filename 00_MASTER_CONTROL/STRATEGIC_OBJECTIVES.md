@@ -47,6 +47,8 @@ Each strategic objective should contain:
 
 Detailed execution should be managed through Monday.
 
+The platform operates primarily through B2B market-entry and business-development activities while developing selective B2G capability for projects requiring legitimate institutional coordination, regulatory understanding or engagement with relevant public-sector stakeholders.
+
 GitHub remains the source of truth for the strategic framework and supporting documentation.
 
 ---
