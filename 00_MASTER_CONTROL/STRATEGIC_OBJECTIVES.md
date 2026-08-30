@@ -360,7 +360,7 @@ B2G activity must remain:
 
 Access Algeria does not rely on informal influence as a substitute for lawful processes, regulatory compliance or formal institutional engagement.
 
-# OBJECTIVE 10 — BUILD LONG-TERM COMMERCIAL CAPABILITY
+# OBJECTIVE 11 — BUILD LONG-TERM COMMERCIAL CAPABILITY
 
 ## Objective
 
