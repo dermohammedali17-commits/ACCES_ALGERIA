@@ -1,3 +1,6 @@
+> STATUS: AUTHORITATIVE REPOSITORY ARCHITECTURE MAP
+> PURPOSE: High-level map of the Access Algeria 00–19 repository structure.
+> NOTE: This document defines repository structure only. It does not define operational workflows or system behavior.
 00_MASTER_CONTROL
 01_MARKET_INTELLIGENCE
 02_BRAND_INTELLIGENCE
