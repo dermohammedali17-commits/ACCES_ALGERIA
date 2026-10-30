@@ -1,0 +1,7 @@
+# harvard-growth-lab/comtrade-downloader (mirror trade analysis, PoC 2).
+# It pins pandas==2.3.3, which conflicts with pandas 3 in requirements.txt,
+# so install it in its OWN virtual environment:
+#   py -m venv .venv-comtrade
+#   .venv-comtrade\Scripts\activate
+#   pip install -r requirements-comtrade-mirror.txt
+comtrade-downloader @ git+https://github.com/harvard-growth-lab/comtrade-downloader
