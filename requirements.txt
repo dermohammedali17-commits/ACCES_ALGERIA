@@ -1,0 +1,6 @@
+# ACCES_ALGERIA – Python dependencies
+# World Bank data API (github.com/tgherzog/wbgapi)
+wbgapi==1.0.14
+# LLM-friendly web crawler (github.com/unclecode/crawl4ai)
+# After install, run once: crawl4ai-setup
+crawl4ai==0.9.5
