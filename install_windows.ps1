@@ -1,6 +1,6 @@
 # ACCESS ALGERIA - one-shot installer for Windows (PowerShell)
 # Run from the repository root:  powershell -ExecutionPolicy Bypass -File .\install_windows.ps1
-# Requires Python 3.10+ (https://www.python.org/downloads/) and Git (needed for the git+ packages).
+# Requires Python 3.12 (py -3.12) and Git. Python 3.15 is NOT supported by PyTorch/marker wheels.
 
 $ErrorActionPreference = "Stop"
 $root = $PSScriptRoot
@@ -16,7 +16,7 @@ function Make-Venv($name, $reqFile) {
     Write-Host "`n=== $name ($reqFile) ===" -ForegroundColor Cyan
     $venvPath = Join-Path $root $name
     $py = Join-Path $venvPath "Scripts\python.exe"
-    if (-not (Test-Path $py)) { Run-Checked "py" @("-m", "venv", $venvPath) }
+    if (-not (Test-Path $py)) { Run-Checked "py" @("-3.12", "-m", "venv", $venvPath) }
     Run-Checked $py @("-m", "pip", "install", "--upgrade", "pip")
     # Install package by package so one failure does not hide the others
     $failed = @()
@@ -35,7 +35,7 @@ function Make-Venv($name, $reqFile) {
     return $py
 }
 
-Write-Host "Python:" -NoNewline; py --version
+Write-Host "Using Python 3.12:" -NoNewline; py -3.12 --version
 Write-Host "Git:" -NoNewline; git --version
 
 # 1) Core system: Phases 1-4
