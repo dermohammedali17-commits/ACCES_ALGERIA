@@ -1,0 +1,11 @@
+# Python environments (created by install_windows.ps1)
+.venv/
+.venv-*/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Secrets and local data
+.env
+data/cache/
+data/output/
