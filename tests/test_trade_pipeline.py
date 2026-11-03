@@ -73,6 +73,8 @@ def test_direct_import_success(trade_row, monkeypatch):
 
     assert len(df) == 1
     assert df.iloc[0]["is_mirror_estimate"] == False
+    assert df.iloc[0]["confidence_level"] == "MEDIUM"
+    assert df.iloc[0]["validation_status"] == "UNVERIFIED"
     assert report["status"] == "SUCCESS"
     assert report["retrieved_years"] == [2023]
     assert df.iloc[0]["source_url"].startswith("https://comtradeapi.un.org/")
@@ -114,6 +116,8 @@ def test_mirror_estimate_fallback(trade_row, monkeypatch):
 
     assert len(df) == 1
     assert df.iloc[0]["is_mirror_estimate"] == True
+    assert df.iloc[0]["confidence_level"] == "LOW"
+    assert df.iloc[0]["validation_status"] == "UNVERIFIED"
     assert report["status"] == "PARTIAL"
     assert report["years"][0]["source_type"] == "MIRROR_ESTIMATE"
 
@@ -174,6 +178,18 @@ def test_trade_failure_report(monkeypatch):
     assert report["missing_years"] == [2023]
 
 
+def test_custom_comtrade_client_without_mode_is_reported_safely():
+    class ClientWithoutMode:
+        def fetch(self, reporter, partner, year, flow, commodity="87"):
+            return []
+
+    _, report = TradeMacroPipeline(
+        client=ClientWithoutMode(),
+    ).fetch_trade_with_report([2023])
+
+    assert report["endpoint_mode"] == "CUSTOM_CLIENT"
+
+
 def test_world_bank_success():
     responses = {
         "NY.GDP.MKTP.CD": [
@@ -190,7 +206,12 @@ def test_world_bank_success():
 
     assert len(df) == 2
     assert report["indicators"][0]["status"] == "SUCCESS"
+    assert df.iloc[0]["confidence_level"] == "MEDIUM"
+    assert df.iloc[0]["validation_status"] == "UNVERIFIED"
     assert df.iloc[0]["source_url"].startswith("https://api.worldbank.org/v2/country/DZA/")
+    assert "date=2022%3A2023" in df.iloc[0]["source_url"]
+    assert "format=json" in df.iloc[0]["source_url"]
+    assert "per_page=100" in df.iloc[0]["source_url"]
 
 
 def test_world_bank_missing_year():
@@ -240,6 +261,112 @@ def test_world_bank_connection_failure():
     _, report = pipeline.fetch_macro_with_report(2022, 2023)
 
     assert report["indicators"][0]["status"] == "FAILED"
+    assert [item["status"] for item in report["indicators"]] == [
+        "FAILED",
+        "NO_DATA",
+        "NO_DATA",
+    ]
+    assert report["status"] == "PARTIAL"
+
+
+def test_world_bank_no_observations_are_reported_as_no_data():
+    empty_observations = [
+        {"date": "2023", "value": None},
+    ]
+    client = FakeWorldBankClient(
+        responses={
+            code: empty_observations
+            for code in TradeMacroPipeline.INDICATORS
+        }
+    )
+    pipeline = TradeMacroPipeline(world_bank_client=client)
+
+    _, report = pipeline.fetch_macro_with_report(2023, 2023)
+
+    assert report["status"] == "NO_DATA"
+    assert all(
+        item["status"] == "NO_DATA"
+        and item["error"] is None
+        and item["missing_years"] == [2023]
+        for item in report["indicators"]
+    )
+
+
+def test_world_bank_pipeline_uses_target_country_for_client_and_provenance(
+    tmp_path,
+    monkeypatch,
+):
+    countries_file = tmp_path / "countries.csv"
+    countries_file.write_text(
+        "country_name,iso2,iso3,comtrade_code,world_bank_code,region,"
+        "is_target_market,is_active\n"
+        "France,FR,FRA,251,FRA,Europe,true,true\n",
+        encoding="utf-8",
+    )
+    requested_countries = []
+
+    def fake_fetch(client, indicator, start_year, end_year):
+        requested_countries.append(client.country_code)
+        return [{"date": "2023", "value": 10.5}]
+
+    monkeypatch.setattr(
+        "src.data.trade_pipeline.WorldBankRESTClient.fetch",
+        fake_fetch,
+    )
+    pipeline = TradeMacroPipeline(
+        country_reference=CountryReference(countries_file),
+    )
+
+    dataframe, report = pipeline.fetch_macro_with_report(2023, 2023)
+
+    assert requested_countries == ["FRA"] * len(pipeline.INDICATORS)
+    assert report["country"] == "FRA"
+    assert set(dataframe["country"]) == {"FRA"}
+    assert all("/country/FRA/indicator/" in url for url in dataframe["source_url"])
+    assert set(dataframe["data_origin"]) == {"THIRD_PARTY_REPORTED"}
+
+
+def test_world_bank_macro_ignores_invalid_values_and_out_of_range_years():
+    client = FakeWorldBankClient(
+        responses={
+            "NY.GDP.MKTP.CD": [
+                {"date": "2022", "value": "12.5"},
+                {"date": "2023", "value": "NaN"},
+                {"date": "2024", "value": 999},
+            ]
+        }
+    )
+    pipeline = TradeMacroPipeline(world_bank_client=client)
+
+    dataframe, report = pipeline.fetch_macro_with_report(2022, 2023)
+
+    indicator = report["indicators"][0]
+    assert len(dataframe) == 1
+    assert dataframe.iloc[0]["year"] == 2022
+    assert dataframe.iloc[0]["value"] == 12.5
+    assert indicator["status"] == "PARTIAL"
+    assert indicator["retrieved_years"] == [2022]
+    assert indicator["missing_years"] == [2023]
+    assert report["status"] == "PARTIAL"
+
+
+def test_world_bank_record_count_is_separate_from_year_coverage():
+    client = FakeWorldBankClient(
+        responses={
+            "NY.GDP.MKTP.CD": [
+                {"date": "2023", "value": 10},
+                {"date": "2023", "value": 11},
+            ]
+        }
+    )
+    pipeline = TradeMacroPipeline(world_bank_client=client)
+
+    dataframe, report = pipeline.fetch_macro_with_report(2023, 2023)
+
+    indicator = report["indicators"][0]
+    assert len(dataframe) == 2
+    assert indicator["record_count"] == 2
+    assert indicator["retrieved_years"] == [2023]
 
 
 def test_invalid_year_range():
@@ -362,6 +489,25 @@ def test_duplicate_audit_detects_dimensional_collisions(trade_row):
     assert report["exact_duplicate_records"] == 0
 
 
+def test_duplicate_audit_detects_estimation_flag_differences(trade_row):
+    pipeline = TradeMacroPipeline(client=FakeComtradeClient())
+    reported_weight = pipeline._normalize(
+        {**trade_row, "isnetWgtEstimated": False},
+        mirror=False,
+    ).model_dump()
+    estimated_weight = pipeline._normalize(
+        {**trade_row, "isnetWgtEstimated": True},
+        mirror=False,
+    ).model_dump()
+
+    report = audit_trade_duplicates(
+        pd.DataFrame([reported_weight, estimated_weight])
+    )
+
+    assert report["exact_duplicate_groups"] == 0
+    assert report["dimensional_collision_groups"] == 1
+
+
 def test_duplicate_audit_respects_record_provenance(trade_row):
     pipeline = TradeMacroPipeline(client=FakeComtradeClient())
     first = pipeline._normalize(trade_row, mirror=False).model_dump()
@@ -395,6 +541,27 @@ def test_trade_normalization_rejects_query_mismatch(trade_row):
             expected_period=2023,
             expected_flow="M",
         )
+
+
+def test_trade_normalization_preserves_weight_estimation_and_source_query(
+    trade_row,
+):
+    pipeline = TradeMacroPipeline(client=FakeComtradeClient())
+    row = {
+        **trade_row,
+        "netWgt": 0,
+        "isnetWgtEstimated": True,
+    }
+
+    record = pipeline._normalize(row, mirror=True).model_dump()
+
+    assert record["net_weight_kg"] is None
+    assert record["is_net_weight_estimated"] is True
+    assert "reporterCode=156" in record["source_url"]
+    assert "partnerCode=12" in record["source_url"]
+    assert "period=2023" in record["source_url"]
+    assert "flowCode=X" in record["source_url"]
+    assert "cmdCode=87" in record["source_url"]
 
 
 def test_duplicate_audit_separates_direct_and_mirror(trade_row):

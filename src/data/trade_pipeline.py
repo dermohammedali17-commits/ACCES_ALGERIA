@@ -119,6 +119,7 @@ class TradeRecord(BaseModel):
     cif_value_usd: float | None = None
 
     net_weight_kg: float | None = None
+    is_net_weight_estimated: bool | None = None
 
     reporter_name: str | None = None
     partner_name: str | None = None
@@ -215,6 +216,8 @@ def audit_trade_duplicates(
         "is_reported",
         "is_aggregate",
     ]
+    if "is_net_weight_estimated" in dataframe.columns:
+        value_columns.append("is_net_weight_estimated")
 
     source_column = "is_mirror_estimate"
     provenance_columns = [
@@ -787,7 +790,30 @@ class TradeMacroPipeline:
             parsed_value = _safe_float(raw_value)
             if raw_value is not None and parsed_value is None:
                 raise ValueError(f"{source_field} must be a finite number")
+            if output_field == "net_weight_kg" and parsed_value == 0:
+                parsed_value = None
             numeric_values[output_field] = parsed_value
+
+        net_weight_estimated = row.get(
+            "isnetWgtEstimated",
+            row.get("isNetWgtEstimated"),
+        )
+
+        source_url = (
+            COMTRADE_DATA_URL
+            if getattr(self.client, "authenticated", False)
+            else COMTRADE_PREVIEW_URL
+        )
+        source_url += "?" + urlencode({
+            "reporterCode": reporter_code,
+            "partnerCode": partner_code,
+            "period": normalized_period,
+            "flowCode": normalized_flow,
+            "cmdCode": commodity_code,
+            "motCode": 0,
+            "partner2Code": 0,
+            "breakdownMode": "classic",
+        })
 
         return TradeRecord(
             reporter_code=reporter_code,
@@ -799,6 +825,7 @@ class TradeMacroPipeline:
             fob_value_usd=numeric_values["fob_value_usd"],
             cif_value_usd=numeric_values["cif_value_usd"],
             net_weight_kg=numeric_values["net_weight_kg"],
+            is_net_weight_estimated=net_weight_estimated,
             reporter_name=reporter_name,
             partner_name=partner_name,
             is_mirror_estimate=mirror,
@@ -809,16 +836,17 @@ class TradeMacroPipeline:
                 if mirror
                 else DataOrigin.DIRECT_REPORTED
             ),
+            confidence_level=(
+                ConfidenceLevel.LOW
+                if mirror
+                else ConfidenceLevel.MEDIUM
+            ),
             source=(
                 "UN Comtrade mirror exports"
                 if mirror
                 else "UN Comtrade direct imports"
             ),
-            source_url=(
-                COMTRADE_DATA_URL
-                if getattr(self.client, "authenticated", False)
-                else COMTRADE_PREVIEW_URL
-            ),
+            source_url=source_url,
         )
 
     @staticmethod
@@ -1121,6 +1149,7 @@ class TradeMacroPipeline:
 
             indicator_error = None
             valid_years = []
+            indicator_record_count = 0
 
             try:
 
@@ -1145,25 +1174,31 @@ class TradeMacroPipeline:
                     if year not in requested_years:
                         continue
 
+                    record = MacroRecord(
+                        country=self.target_iso3,
+
+                        indicator_code=code,
+                        indicator_name=name,
+
+                        year=year,
+                        value=value,
+                        data_origin=DataOrigin.THIRD_PARTY_REPORTED,
+                        confidence_level=ConfidenceLevel.MEDIUM,
+                        source_url=(
+                            f"{WORLD_BANK_URL}/{self.target_world_bank_code}/"
+                            f"indicator/{code}?"
+                            + urlencode({
+                                "date": f"{start_year}:{end_year}",
+                                "format": "json",
+                                "per_page": 100,
+                            })
+                        ),
+
+                    ).model_dump()
+
+                    output.append(record)
                     valid_years.append(year)
-
-                    output.append(
-                        MacroRecord(
-                            country=self.target_iso3,
-
-                            indicator_code=code,
-                            indicator_name=name,
-
-                            year=year,
-                            value=value,
-                            data_origin=DataOrigin.THIRD_PARTY_REPORTED,
-                            source_url=(
-                                f"{WORLD_BANK_URL}/{self.target_world_bank_code}/"
-                                f"indicator/{code}"
-                            ),
-
-                        ).model_dump()
-                    )
+                    indicator_record_count += 1
 
             except (OSError, ValueError, TypeError, KeyError, AttributeError) as exc:
 
@@ -1179,8 +1214,11 @@ class TradeMacroPipeline:
                 set(requested_years) - set(retrieved_years)
             )
 
-            if indicator_error or not retrieved_years:
+            if indicator_error:
                 status = "FAILED"
+
+            elif not retrieved_years:
+                status = "NO_DATA"
 
             elif missing_years:
                 status = "PARTIAL"
@@ -1199,7 +1237,7 @@ class TradeMacroPipeline:
                 "retrieved_years": retrieved_years,
                 "missing_years": missing_years,
 
-                "record_count": len(retrieved_years),
+                "record_count": indicator_record_count,
 
                 "error": indicator_error,
 
@@ -1217,6 +1255,8 @@ class TradeMacroPipeline:
             if all(status == "SUCCESS" for status in statuses)
             else "FAILED"
             if all(status == "FAILED" for status in statuses)
+            else "NO_DATA"
+            if all(status == "NO_DATA" for status in statuses)
             else "PARTIAL"
         )
 
