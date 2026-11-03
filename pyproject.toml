@@ -1,0 +1,30 @@
+[tool.ruff]
+line-length = 88
+target-version = "py312"
+
+[tool.ruff.lint]
+select = [
+    "I001",
+    "PLW1510",
+    "RUF012",
+    "UP035",
+    "UP017",
+    "RUF046",
+    "TRY004",
+    "BLE001",
+    "C401",
+    "SIM114",
+    "UP045",
+    "FURB157",
+    "RUF059",
+]
+
+[tool.mypy]
+python_version = "3.12"
+files = ["src/data", "src/document", "src/scoring/engine.py"]
+warn_unused_configs = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+addopts = "-ra"

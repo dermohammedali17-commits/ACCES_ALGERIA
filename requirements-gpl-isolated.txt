@@ -1,0 +1,8 @@
+# datalab-to/marker and datalab-to/surya are GPL-3.0 and pull in PyTorch (multi-GB, CUDA recommended).
+# Per the project blueprint they must run as an ISOLATED microservice (own venv or container),
+# never imported into the proprietary core. Install in a SEPARATE virtual environment:
+#   py -m venv .venv-marker
+#   .venv-marker\Scripts\activate
+#   pip install -r requirements-gpl-isolated.txt
+marker-pdf==2.1.0
+surya-ocr
