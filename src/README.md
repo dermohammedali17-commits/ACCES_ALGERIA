@@ -1,12 +1,13 @@
-# src/ - ACCESS ALGERIA code
+# Python source
 
-| Path | Purpose | Blueprint layer |
-|---|---|---|
-| `scoring/opportunity_scorer_b.py` | Deterministic Model B engine (9 dimensions, HIGH/MEDIUM/LOW confidence). Source of truth: `04_OPPORTUNITY_SCORING/` | Layer 5 |
-| `infrastructure/adapters/comtrade_adapter.py` | UN Comtrade wrapper: API key, rate limit, retry, local cache | Layer 1 |
-| `poc/mirror_trade.py` | PoC 2: Algeria HS 8703/8704 direct vs mirror imports | Layer 1 |
+| Path | Purpose |
+|---|---|
+| `data/trade_pipeline.py` | UN Comtrade and World Bank data clients, normalization, retrieval reports, and duplicate audits. |
+| `data/reference/country_reference.py` | Loads and validates the country reference dataset. |
+| `document/gazette_parser.py` | Injected service boundary for Gazette PDF layout parsing and structured extraction. |
+| `scoring/engine.py` | Deterministic nine-dimension scorer with completeness-based confidence. |
+| `scoring/opportunity_scorer_b.py` | Existing evidence-aware Model B scorer with named dimensions and priority bands. |
+| `infrastructure/adapters/comtrade_adapter.py` | UN Comtrade API wrapper with rate limiting, retry, and local caching. |
+| `poc/mirror_trade.py` | Existing mirror-trade proof of concept for Algeria vehicle imports. |
 
-Run everything: `powershell -ExecutionPolicy Bypass -File .\run_all.ps1`
-Tests only: `.\.venv\Scripts\python.exe -m pytest -q`
-
-Rule: LLMs/agents may propose dimension inputs with evidence, but never set a score.
+The two scoring modules remain separate implementations while their intended roles are evaluated. Tests for the newer data and document modules live in `tests/test_trade_pipeline.py`, `tests/test_world_bank_client.py`, `tests/test_country_reference.py`, and `tests/test_scoring_engine.py`. The existing adapter and mirror-trade tests remain in `tests/test_mirror_trade.py` and `tests/test_opportunity_scorer_b.py`.
