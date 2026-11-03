@@ -1,0 +1,38 @@
+name: Python quality
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    runs-on: windows-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements-dev.txt
+
+      - name: Install quality and runtime-check dependencies
+        run: python -m pip install -r requirements-dev.txt pandas==3.0.5 pydantic==2.13.5
+
+      - name: Run Ruff
+        run: python -m ruff check src/data src/document src/scoring/engine.py tests/test_country_reference.py tests/test_scoring_engine.py tests/test_trade_pipeline.py tests/test_world_bank_client.py project_audit.py
+
+      - name: Run Mypy
+        run: python -m mypy
+
+      - name: Run tests
+        run: python -m pytest -q
+
+      - name: Check installed dependencies
+        run: python -m pip check
