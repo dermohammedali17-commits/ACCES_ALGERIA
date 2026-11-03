@@ -66,6 +66,23 @@ Each opportunity should receive:
 - Key Weaknesses
 - Recommended Action
 
+## Python implementation
+
+`src/scoring/engine.py` exposes two explicit implementations:
+
+- `OpportunityScorerA` follows the published methodology: dimension inputs are
+  0–10, the documented weights are applied, and a complete result is returned
+  on a 0–100 scale. The caller must provide an evidence-based confidence
+  assessment; the scorer does not infer evidence quality from score values.
+- `OpportunityScorerB` preserves the earlier 0–100 input model and its own
+  weights for compatibility. Its confidence value measures dimension
+  completeness only, so it must not be interpreted as evidence confidence.
+
+Use Model A for comparisons governed by this document. Model B results are not
+directly comparable with Model A results. Results carry a `model` field
+(`A_PUBLISHED` or `B_LEGACY`) so downstream reports can preserve that
+distinction.
+
 ---
 
 # DOCUMENT CONTROL

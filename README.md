@@ -287,6 +287,45 @@ KNOWLEDGE
 
 ---
 
+# 13. PYTHON DEVELOPMENT
+
+The Python source code is developed with Python 3.12. The core project
+dependencies are listed in `requirements.txt`; development and quality tools
+are pinned separately in `requirements-dev.txt`.
+
+## Set up a local environment on Windows
+
+From the repository root in PowerShell, create the virtual environment if it
+does not already exist, then install the project and development dependencies:
+
+```powershell
+if (-not (Test-Path .\.venv\Scripts\python.exe)) {
+    py -3.12 -m venv .venv
+}
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt -r requirements-dev.txt
+```
+
+Run project tools through `.venv\Scripts\python.exe` so they use the
+repository's environment.
+
+## Run quality checks
+
+```powershell
+.\.venv\Scripts\python.exe -m ruff check src/data src/document src/scoring/engine.py tests/test_country_reference.py tests/test_gazette_parser.py tests/test_scoring_engine.py tests/test_trade_pipeline.py tests/test_world_bank_client.py project_audit.py
+.\.venv\Scripts\python.exe -m mypy
+.\.venv\Scripts\python.exe -m pytest -q
+.\.venv\Scripts\python.exe -m pip check
+```
+
+Ruff and Mypy cover the data and document pipeline, the current scoring engine,
+their tests, and the project audit script. The full test suite is collected
+from `tests/`. Tool settings are maintained in `pyproject.toml`.
+
+The `Python quality` GitHub Actions workflow runs these checks on pushes and
+pull requests using Windows and Python 3.12.
+
+---
+
 ## DOCUMENT CONTROL
 
 **Repository:** Access Algeria  

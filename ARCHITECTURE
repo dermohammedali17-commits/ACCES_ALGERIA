@@ -1,27 +1,96 @@
-> STATUS: AUTHORITATIVE REPOSITORY ARCHITECTURE MAP
-> PURPOSE: High-level map of the Access Algeria 00–19 repository structure.
-> NOTE: This document defines repository structure only. It does not define operational workflows or system behavior.
-00_MASTER_CONTROL
-01_MARKET_INTELLIGENCE
-02_BRAND_INTELLIGENCE
-03_BRAND_DATABASE
-04_MARKET_ENTRY
-05_OPPORTUNITY_SCORING
-06_DUE_DILIGENCE
-07_REGULATORY_INTELLIGENCE
-08_PARTNER_ECOSYSTEM
-09_CONTACT_INTELLIGENCE
-10_PROJECT_PIPELINE
-11_ASTON_MARTIN
-12_TOURISM
-13_FINANCIAL_MODELS
-14_STRATEGY
-15_SALES_OUTREACH
-16_REPORTS
-17_PITCH_DECKS
-18_DATA
-19_AI_SYSTEM
-20_KNOWLEDGE_BASE
-21_OPERATIONS
-22_GOVERNANCE
-23_ARCHIVE
+# ACCESS ALGERIA — REPOSITORY ARCHITECTURE
+
+> This file maps the repository and describes its operating flows. The map
+> describes where controlled knowledge and software live; the flows describe
+> how research and opportunities move through the system.
+
+## 1. Repository map
+
+### Strategy and governance
+
+| Area | Location | Purpose |
+|---|---|---|
+| Control | `00_MASTER_CONTROL` | Strategic foundation and scope |
+| Governance | `01_GOVERNANCE_AND_VERIFICATION` | Evidence, verification, and information quality |
+| Intelligence | `02_MARKET_INTELLIGENCE`, `03_BRAND_DATABASE`, `06_PARTNERSHIP_INTELLIGENCE`, `07_01REGULATORY_INTELLIGENCE` | Market, brand, partner, and regulatory research |
+| Decision | `04_OPPORTUNITY_SCORING`, `05_MARKET_ENTRY` | Opportunity assessment and entry strategy |
+| Case validation | `08_ASTON_MARTIN_CASE` | Flagship case application |
+| AI | `09_AI_SYSTEM` | AI use and research protocols |
+| Execution | `10_MONDAY_EXECUTION_SYSTEM`, `16_OPERATIONS` | Operational workflows and execution |
+| Integration | `11_SYSTEM_INTEGRATION` | System connections and information flow |
+| Outputs | `12_TEMPLATES_AND_OUTPUTS`, `17_CLIENT_DELIVERY_SYSTEM` | Templates and client deliverables |
+| Portfolio | `13_PORTFOLIO_AND_DASHBOARD`, `19_PERFORMANCE_MANAGEMENT` | Portfolio and performance tracking |
+| System map | `14_FINAL_SYSTEM_MAP` | Lifecycle and operating model |
+| Repository governance | `15_REPOSITORY_GOVERNANCE` | Repository structure, audits, and change control |
+| Knowledge | `18_KNOWLEDGE_MANAGEMENT` | Knowledge retention and classification |
+
+### Software and quality checks
+
+| Location | Purpose |
+|---|---|
+| `src/data` | Country reference data and external economic-data pipeline |
+| `src/document` | Gazette document parsing boundary and extraction schema |
+| `src/scoring` | Opportunity scoring implementations |
+| `tests` | Automated tests for the Python modules |
+| `.github/workflows` | Automated Python quality workflow |
+| `access-algeria-website` | Separate website workspace; currently a Vite starter scaffold |
+
+Python and quality-tool configuration is in `pyproject.toml`, `requirements.txt`,
+and `requirements-dev.txt`. The isolated dependency manifests
+`requirements-comtrade-mirror.txt` and `requirements-gpl-isolated.txt` keep
+their respective compatibility and licensing constraints separate.
+
+## 2. Operating lifecycle
+
+```text
+IDENTIFY
+  ↓
+RESEARCH
+  ↓
+VERIFY
+  ↓
+ASSESS
+  ↓
+SCORE
+  ↓
+STRATEGIZE
+  ↓
+DECIDE
+  ↓
+ACTIVATE
+  ↓
+EXECUTE
+  ↓
+MEASURE
+  ↓
+LEARN
+  ↓
+UPDATE
+```
+
+## 3. Information and execution flow
+
+```text
+External research
+  ↓
+Evidence and source references
+  ↓
+01_GOVERNANCE_AND_VERIFICATION
+  Claim review, verification, and confidence classification
+  ↓
+GitHub repository
+  Versioned methodologies, frameworks, and structured knowledge
+  ↓
+AI-supported analysis
+  ↓
+Human strategic and commercial decision
+  ↓
+Monday operational execution
+  ↓
+Measurement and lessons returned to the repository
+```
+
+Verification is a governed review step. Storing material in GitHub does not by
+itself make that material verified. AI supports analysis and drafting; people
+retain authority over strategic, legal, commercial, and institutional
+decisions.

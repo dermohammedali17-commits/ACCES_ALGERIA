@@ -1,0 +1,6 @@
+country_name,iso2,iso3,comtrade_code,world_bank_code,region,is_target_market,is_active
+Algeria,DZ,DZA,12,DZA,North Africa,true,true
+China,CN,CHN,156,CHN,East Asia,false,true
+France,FR,FRA,251,FRA,Western Europe,false,true
+Germany,DE,DEU,276,DEU,Western Europe,false,true
+Türkiye,TR,TUR,792,TUR,Western Asia,false,true
