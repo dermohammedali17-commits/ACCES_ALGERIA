@@ -29,3 +29,6 @@ opyncorporates @ git+https://github.com/pjryan126/opyncorporates
 
 # --- PHASE 4: Governance and quality control ---
 ragas==0.4.3
+
+# --- Dev / tests ---
+pytest==9.1.1
