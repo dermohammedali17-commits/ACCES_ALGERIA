@@ -10,16 +10,15 @@ Design rules (from the project blueprint):
   * Missing evidence is never invented: it is reported as missing, and the confidence
     level is lowered accordingly ("do not invent precision").
 
-NOTE - weights: the PDF blueprint lists the multiset 20/15/15/15/10/10/5/5/5 in a different
-order than the repository methodology. This module follows the repository (A-I below).
-Both sum to 100. Weights stay a parameter so the owner can lock them in explicitly.
+Model B is the canonical P04 model. The approved P04 roadmap vector is applied in
+dimension order below; weights are fixed so opportunities remain comparable.
 """
 
 from __future__ import annotations
 
 from collections.abc import Mapping
 from enum import Enum
-from typing import Optional
+from types import MappingProxyType
 
 from pydantic import BaseModel, Field, field_validator, model_validator
 
@@ -39,20 +38,21 @@ DIMENSIONS: tuple[str, ...] = (
     "strategic_timing",        # I
 )
 
-DEFAULT_WEIGHTS: Mapping[str, float] = {
+DEFAULT_WEIGHTS: Mapping[str, float] = MappingProxyType({
     "market_attractiveness": 0.20,
     "brand_market_fit": 0.15,
     "demand_potential": 0.15,
-    "competitive_gap": 0.10,
-    "regulatory_feasibility": 0.15,
-    "entry_complexity": 0.05,
-    "partner_availability": 0.10,
+    "competitive_gap": 0.15,
+    "regulatory_feasibility": 0.10,
+    "entry_complexity": 0.10,
+    "partner_availability": 0.05,
     "economic_potential": 0.05,
     "strategic_timing": 0.05,
-}
+})
 
 SCALE_MIN = 0.0
 SCALE_MAX = 10.0
+SCORING_MODEL_VERSION = "1.0.0"
 
 
 class Confidence(str, Enum):
@@ -69,9 +69,8 @@ class Priority(str, Enum):
     LOW_PRIORITY = "LOW PRIORITY"  # 0-39
 
 
-# Evidence reliability -> numeric reliability used for the confidence index.
-# ASSUMPTION (flagged for owner approval): these cut-offs are engineering defaults,
-# the methodology only defines the three labels, not the thresholds.
+# P04 v1 confidence policy. These values are not opportunity-score weights.
+# Change them only through a versioned methodology decision.
 RELIABILITY_VALUE: Mapping[Confidence, float] = {
     Confidence.HIGH: 1.0,
     Confidence.MEDIUM: 0.6,
@@ -170,10 +169,9 @@ def _confidence_from_index(index: float, missing_weight: float) -> Confidence:
 
 def score_opportunity(
     opportunity: OpportunityInput,
-    weights: Mapping[str, float] = DEFAULT_WEIGHTS,
 ) -> ScoreResult:
     """Compute the Model B score. Deterministic and side-effect free."""
-    validate_weights(weights)
+    weights = DEFAULT_WEIGHTS
 
     points = 0.0          # 0-100 scale, missing = 0
     points_max = 0.0      # missing = 10

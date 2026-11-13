@@ -46,7 +46,7 @@ def test_published_method_uses_documented_scale_weights_and_normalization():
         d9=10,
     )
 
-    assert result.weighted_total == pytest.approx(68.0)
+    assert result.weighted_total == pytest.approx(64.0)
     assert result.confidence is Confidence.MEDIUM
     assert result.model == "A_PUBLISHED"
 

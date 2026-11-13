@@ -1,0 +1,46 @@
+{
+  "opportunity_id": "replace-with-stable-id",
+  "name": "Replace with opportunity name",
+  "assessed_by": "reviewer-id",
+  "assessed_at": "2026-11-11T12:00:00Z",
+  "gates": [
+    {
+      "gate_id": "legal_admissibility",
+      "decision": "UNKNOWN",
+      "assessed_by": "reviewer-id",
+      "assessed_at": "2026-11-11T12:00:00Z",
+      "rationale": "Awaiting qualified review and current evidence.",
+      "evidence_refs": [],
+      "conditions": []
+    },
+    {
+      "gate_id": "market_authorization_path",
+      "decision": "UNKNOWN",
+      "assessed_by": "reviewer-id",
+      "assessed_at": "2026-11-11T12:00:00Z",
+      "rationale": "Awaiting qualified review and current evidence.",
+      "evidence_refs": [],
+      "conditions": []
+    },
+    {
+      "gate_id": "restricted_party_clearance",
+      "decision": "UNKNOWN",
+      "assessed_by": "reviewer-id",
+      "assessed_at": "2026-11-11T12:00:00Z",
+      "rationale": "Awaiting documented party screening.",
+      "evidence_refs": [],
+      "conditions": []
+    }
+  ],
+  "dimensions": {
+    "market_attractiveness": {"score": null, "reliability": "LOW", "reason": "", "sources": []},
+    "brand_market_fit": {"score": null, "reliability": "LOW", "reason": "", "sources": []},
+    "demand_potential": {"score": null, "reliability": "LOW", "reason": "", "sources": []},
+    "competitive_gap": {"score": null, "reliability": "LOW", "reason": "", "sources": []},
+    "regulatory_feasibility": {"score": null, "reliability": "LOW", "reason": "", "sources": []},
+    "entry_complexity": {"score": null, "reliability": "LOW", "reason": "", "sources": []},
+    "partner_availability": {"score": null, "reliability": "LOW", "reason": "", "sources": []},
+    "economic_potential": {"score": null, "reliability": "LOW", "reason": "", "sources": []},
+    "strategic_timing": {"score": null, "reliability": "LOW", "reason": "", "sources": []}
+  }
+}

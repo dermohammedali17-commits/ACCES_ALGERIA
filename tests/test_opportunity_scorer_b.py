@@ -68,17 +68,17 @@ def test_all_fives_is_50_watchlist():
 
 
 def test_hand_calculated_benchmark():
-    # 0.20*8 + 0.15*7 + 0.15*9 + 0.10*6 + 0.15*5 + 0.05*4 + 0.10*7 + 0.05*8 + 0.05*6 = 6.95 -> 69.5
+    # 0.20*8 + 0.15*7 + 0.15*9 + 0.15*6 + 0.10*5 + 0.10*4 + 0.05*7 + 0.05*8 + 0.05*6 = 6.85 -> 68.5
     scores = dict(
         market_attractiveness=8, brand_market_fit=7, demand_potential=9,
         competitive_gap=6, regulatory_feasibility=5, entry_complexity=4,
         partner_availability=7, economic_potential=8, strategic_timing=6,
     )
     r = score_from_dict("benchmark", scores)
-    assert r.score == pytest.approx(69.5)
-    assert r.priority == Priority.C  # 69.5 is below the B band (70)
+    assert r.score == pytest.approx(68.5)
+    assert r.priority == Priority.C  # 68.5 is below the B band (70)
     assert r.breakdown["market_attractiveness"] == pytest.approx(16.0)
-    assert sum(r.breakdown.values()) == pytest.approx(69.5)
+    assert sum(r.breakdown.values()) == pytest.approx(68.5)
 
 
 def test_deterministic_same_input_same_output():
@@ -125,10 +125,10 @@ def test_none_score_counts_as_missing():
     dims["partner_availability"] = DimensionInput(score=None)
     r = score_opportunity(OpportunityInput(name="x", dimensions=dims))
     assert r.missing == ["partner_availability"]
-    assert r.coverage == pytest.approx(0.9)
-    assert r.score == pytest.approx(72.0)       # 80 * 0.9
-    assert r.score_max == pytest.approx(82.0)   # 72 + 0.10*10*10
-    assert r.confidence == Confidence.HIGH      # missing weight 10% <= 25%, index 0.9
+    assert r.coverage == pytest.approx(0.95)
+    assert r.score == pytest.approx(76.0)       # 80 * 0.95
+    assert r.score_max == pytest.approx(81.0)   # 76 + 0.05*10*10
+    assert r.confidence == Confidence.HIGH      # missing weight 5% <= 25%, index 0.95
 
 
 @pytest.mark.parametrize(

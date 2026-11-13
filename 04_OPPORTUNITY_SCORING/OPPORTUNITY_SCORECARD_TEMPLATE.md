@@ -24,17 +24,31 @@ Assessment Owner:
 | Market Attractiveness | 20% | | |
 | Brand-Market Fit | 15% | | |
 | Demand Potential | 15% | | |
-| Competitive Gap | 10% | | |
-| Regulatory Feasibility | 15% | | |
-| Entry Complexity | 5% | | |
-| Partner Availability | 10% | | |
+| Competitive Gap | 15% | | |
+| Regulatory Feasibility | 10% | | |
+| Entry Complexity | 10% | | |
+| Partner Availability | 5% | | |
 | Economic Potential | 5% | | |
 | Strategic Timing | 5% | | |
 | **Total** | **100%** | | |
 
 ---
 
-# 3. EVIDENCE QUALITY
+# 3. ELIGIBILITY GATES
+
+| Gate | Outcome (PASS / CONDITIONAL / FAIL / UNKNOWN) | Reviewer | Assessed at (timezone) | Rationale | Evidence refs | Conditions |
+|---|---|---|---|---|---|---|
+| Legal admissibility | | | | | | |
+| Market authorization path | | | | | | |
+| Restricted-party clearance | | | | | | |
+
+Eligibility state:
+
+Policy version:
+
+---
+
+# 4. EVIDENCE QUALITY
 
 Overall Confidence:
 
@@ -50,7 +64,7 @@ Key Evidence:
 
 ---
 
-# 4. KEY STRENGTHS
+# 5. KEY STRENGTHS
 
 - 
 - 
@@ -58,7 +72,7 @@ Key Evidence:
 
 ---
 
-# 5. KEY WEAKNESSES
+# 6. KEY WEAKNESSES
 
 - 
 - 
@@ -66,7 +80,7 @@ Key Evidence:
 
 ---
 
-# 6. KEY RISKS
+# 7. KEY RISKS
 
 - 
 - 
@@ -74,13 +88,13 @@ Key Evidence:
 
 ---
 
-# 7. STRATEGIC OPPORTUNITY
+# 8. STRATEGIC OPPORTUNITY
 
 Why could this opportunity matter to Access Algeria?
 
 ---
 
-# 8. RECOMMENDED ACTION
+# 9. RECOMMENDED ACTION
 
 - PRIORITIZE
 - RESEARCH FURTHER
@@ -90,15 +104,21 @@ Why could this opportunity matter to Access Algeria?
 
 ---
 
-# 9. DECISION
+# 10. DECISION
 
 Overall Score:
+
+Score lower bound:
+
+Score upper bound:
 
 Priority:
 
 Confidence:
 
 Decision:
+
+Conditions to resolve:
 
 Reason:
 

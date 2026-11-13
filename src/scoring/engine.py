@@ -13,8 +13,8 @@ WEIGHTS = {
 # Weights and input scale from 04_OPPORTUNITY_SCORING/SCORING_METHODOLOGY.md.
 METHODOLOGY_WEIGHTS = {
     "d1": Decimal("0.20"), "d2": Decimal("0.15"), "d3": Decimal("0.15"),
-    "d4": Decimal("0.10"), "d5": Decimal("0.15"), "d6": Decimal("0.05"),
-    "d7": Decimal("0.10"), "d8": Decimal("0.05"), "d9": Decimal("0.05"),
+    "d4": Decimal("0.15"), "d5": Decimal("0.10"), "d6": Decimal("0.10"),
+    "d7": Decimal("0.05"), "d8": Decimal("0.05"), "d9": Decimal("0.05"),
 }
 
 class Confidence(str, Enum):
@@ -62,10 +62,10 @@ class OpportunityScorerB:
 
 
 class OpportunityScorerA:
-    """Scorer implementing the published 0–10 methodology and weights.
+    """Compatibility scorer using the canonical nine-dimension 0–10 weights.
 
-    The caller must supply an evidence confidence assessment. The scorer does
-    not infer evidence quality from the numeric scores.
+    New P04 integrations should use the evidence-aware Model B implementation
+    in opportunity_scorer_b.py. This class remains for existing callers.
     """
 
     def score(

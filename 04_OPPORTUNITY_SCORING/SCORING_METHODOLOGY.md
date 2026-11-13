@@ -57,7 +57,7 @@ Evaluate:
 
 ---
 
-## D. COMPETITIVE GAP — 10%
+## D. COMPETITIVE GAP — 15%
 
 Evaluate:
 
@@ -68,7 +68,7 @@ Evaluate:
 
 ---
 
-## E. REGULATORY FEASIBILITY — 15%
+## E. REGULATORY FEASIBILITY — 10%
 
 Evaluate:
 
@@ -80,7 +80,7 @@ Evaluate:
 
 ---
 
-## F. ENTRY COMPLEXITY — 5%
+## F. ENTRY COMPLEXITY — 10%
 
 Evaluate:
 
@@ -89,11 +89,11 @@ Evaluate:
 - Time required
 - Infrastructure needs
 
-Higher difficulty should reduce the score.
+Score this dimension inversely: greater entry difficulty reduces the score. Do not penalize the same condition twice as both a gate failure and a dimension penalty. A gate asks whether a path is admissible; this dimension rates the burden of an admissible path.
 
 ---
 
-## G. PARTNER AVAILABILITY — 10%
+## G. PARTNER AVAILABILITY — 5%
 
 Evaluate:
 
@@ -134,6 +134,12 @@ Dimension Score × Weight
 The final score is normalized to:
 
 0–100
+
+When dimensions are missing, report `score` as the conservative lower bound
+(missing values contribute no points) and `score_max` as the optimistic upper
+bound (missing values could contribute their maximum). The missing value is
+not a factual zero. The priority band is calculated from the lower bound; when
+coverage is incomplete, it is a provisional screening label only.
 
 ---
 
@@ -187,7 +193,19 @@ Confidence reflects the quality and completeness of the evidence behind the scor
 
 ---
 
-# 6. CORE RULE
+# 6. ELIGIBILITY GATES
+
+Eligibility is evaluated before weighted scoring. The P04 gate catalogue is defined in `SCORING_RULES.md` and implemented in `src/scoring/p04_engine.py`. Gate outcomes must be supported by evidence; the software does not make legal determinations or infer a gate from a score.
+
+- Any evidenced `FAIL` makes the opportunity `INELIGIBLE`; it is not scored and is returned with a policy-quarantine record.
+- Any `UNKNOWN` makes the opportunity `REVIEW_REQUIRED`; it is not scored until the missing determination is resolved.
+- If every gate passes, the opportunity is `ELIGIBLE`.
+- If there are no failures or unknowns and one or more gates are conditional, it is `CONDITIONALLY_ELIGIBLE`; it may be scored, with conditions surfaced.
+- Structural input errors are isolated separately from policy ineligibility.
+
+The gate evaluator requires every catalogue gate exactly once. A reviewer owns the factual gate determination and evidence references. `CONDITIONAL` requires explicit conditions; `PASS`, `FAIL`, and `CONDITIONAL` require evidence refs.
+
+# 7. CORE RULE
 
 A high score with low confidence should not be treated the same way as a high score supported by strong evidence.
 
@@ -197,7 +215,7 @@ A high score with low confidence should not be treated the same way as a high sc
 
 **Document:** Scoring Methodology
 
-**Version:** 1.0
+**Version:** 2.0
 
 **Status:** Active Framework
 

@@ -68,20 +68,46 @@ Each opportunity should receive:
 
 ## Python implementation
 
-`src/scoring/engine.py` exposes two explicit implementations:
+P04 uses **Model B** as the sole canonical opportunity scoring model:
 
-- `OpportunityScorerA` follows the published methodology: dimension inputs are
-  0–10, the documented weights are applied, and a complete result is returned
-  on a 0–100 scale. The caller must provide an evidence-based confidence
-  assessment; the scorer does not infer evidence quality from score values.
-- `OpportunityScorerB` preserves the earlier 0–100 input model and its own
-  weights for compatibility. Its confidence value measures dimension
-  completeness only, so it must not be interpreted as evidence confidence.
+- Nine named dimensions scored from 0–10.
+- Fixed roadmap weights in `SCORING_METHODOLOGY.md`; the total is shown on a
+  0–100 scale.
+- Missing dimensions remain visibly missing. The result shows a conservative
+  lower bound and an optimistic upper bound; neither means missing evidence is
+  a factual zero. Priority is based on the lower bound and is provisional when
+  evidence is incomplete.
+- Evidence reliability is recorded separately from score magnitude.
+- Priority bands classify the score; they do not make a final business decision.
 
-Use Model A for comparisons governed by this document. Model B results are not
-directly comparable with Model A results. Results carry a `model` field
-(`A_PUBLISHED` or `B_LEGACY`) so downstream reports can preserve that
-distinction.
+Use `src/scoring/p04_engine.py` to apply required eligibility gates, run the
+scorer only for eligible or conditionally eligible opportunities, produce the
+explanation package, and return policy rejections for quarantine. Structural
+input failures are isolated separately. The append-only JSONL store is an
+explicit persistence boundary; callers choose and configure its path.
+
+`src/scoring/engine.py` retains older scorer classes only for compatibility.
+Do not use them for new scoring or compare their outputs with P04 packages.
+
+## Run a P04 assessment
+
+Copy `P04_INPUT_TEMPLATE.json`, fill in the opportunity details, reviewer and
+timezone-aware assessment timestamps, evidence-backed gate outcomes, and any
+dimension scores with their reasons and source references. Then run from the
+repository root in PowerShell:
+
+```powershell
+.\.venv\Scripts\python.exe -m src.scoring.cli .\path\to\opportunity.json `
+  --output .\outputs\opportunity-decision.json `
+  --quarantine .\data\quarantine\p04.jsonl
+```
+
+The CLI refuses to overwrite an existing decision file. Omit `--output` to
+print the package to the terminal; omit `--quarantine` to receive quarantine
+records without persisting them. `UNKNOWN` gates produce a review-required
+package and do not score. A structural error is returned as a validation
+quarantine record. Policy-ineligible packages include the quarantine record;
+when a quarantine path is supplied, it is also appended to that JSONL file.
 
 ---
 
@@ -89,7 +115,7 @@ distinction.
 
 **Document:** Opportunity Scoring System
 
-**Version:** 1.0
+**Version:** 2.0
 
 **Status:** Active Framework
 
