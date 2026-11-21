@@ -21,7 +21,13 @@ select = [
 
 [tool.mypy]
 python_version = "3.12"
-files = ["src/data", "src/document", "src/scoring/engine.py"]
+files = [
+    "src/data",
+    "src/document",
+    "src/scoring/engine.py",
+    "src/scoring/opportunity_scorer_b.py",
+    "src/scoring/p04_engine.py",
+]
 warn_unused_configs = true
 
 [tool.pytest.ini_options]

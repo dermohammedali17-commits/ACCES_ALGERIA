@@ -122,16 +122,18 @@ def test_adapter_raises_after_max_retries(tmp_path, monkeypatch):
 
 def test_adapter_builds_expected_request(tmp_path):
     seen = {}
+    periods = []
 
     def spy(**params):
         seen.update(params)
+        periods.append(params["period"])
         return pd.DataFrame()
 
     make_adapter(tmp_path, spy).fetch_flows("97", "X", [2021, 2022], ["8703", "8704"], partner_code="12")
     assert seen["reporterCode"] == "97"
     assert seen["flowCode"] == "X"
     assert seen["partnerCode"] == "12"
-    assert seen["period"] == "2021,2022"
+    assert periods == ["2021", "2022"]
     assert seen["cmdCode"] == "8703,8704"
     assert seen["clCode"] == "HS"
 

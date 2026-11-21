@@ -32,3 +32,7 @@ ragas==0.4.3
 
 # --- Dev / tests ---
 pytest==9.1.1
+# P6.1 - Authentication and security
+PyJWT==2.15.1
+argon2-cffi==25.1.0
+email-validator>=2.0,<3.0

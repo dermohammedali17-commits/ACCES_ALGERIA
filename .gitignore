@@ -34,3 +34,12 @@ Desktop.ini
 # Generated local data
 data/cache/
 data/output/
+data/quarantine/
+
+# Local runtime databases
+/data/*.duckdb
+/data/*.db
+
+# Local evidence and backups
+data/evidence/
+LPSME_PRE_TENANT_BACKUP_*/

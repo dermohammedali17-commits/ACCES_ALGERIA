@@ -48,9 +48,8 @@ def build_comparison(direct: pd.DataFrame, mirror: pd.DataFrame) -> pd.DataFrame
             return pd.DataFrame(columns=["refYear", "cmdCode", name])
         # Exclude any "World" partner aggregate rows (partnerCode 0) to avoid double counting
         d = df[df["partnerCode"].astype(str) != "0"] if "partnerCode" in df.columns else df
-        return (
-            d.groupby(["refYear", "cmdCode"], as_index=False)["primaryValue"].sum()
-            .rename(columns={"primaryValue": name})
+        return d.groupby(["refYear", "cmdCode"], as_index=False).agg(
+            **{name: ("primaryValue", "sum")}
         )
 
     merged = agg(direct, "direct_import_usd").merge(
@@ -83,7 +82,8 @@ def top_partners(direct: pd.DataFrame, year: int, n: int = 10) -> pd.DataFrame:
         return direct
     d = direct[(direct["refYear"] == year) & (direct["partnerCode"].astype(str) != "0")]
     return (
-        d.groupby(["partnerCode", "partnerDesc"], as_index=False)["primaryValue"].sum()
+        d.groupby(["partnerCode", "partnerDesc"], as_index=False)
+        .agg(primaryValue=("primaryValue", "sum"))
         .sort_values("primaryValue", ascending=False).head(n)
     )
 

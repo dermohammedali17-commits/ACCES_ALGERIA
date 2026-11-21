@@ -3,10 +3,12 @@ from datetime import UTC, datetime
 from urllib.error import HTTPError, URLError
 from urllib.parse import parse_qs, urlparse
 
+import pandas as pd
 import pytest
 
 import src.data.trade_pipeline as trade_module
 from src.data.trade_pipeline import ComtradeRESTClient
+from src.infrastructure.adapters.comtrade_adapter import ComtradeAdapter
 
 
 class FakeResponse:
@@ -194,3 +196,68 @@ def test_retry_delay_handles_http_date(monkeypatch):
         0,
         "Wed, 01 Jan 2025 00:00:10 GMT",
     ) == 10
+
+
+def test_mie_adapter_diagnostics_cover_data_empty_and_error_states(tmp_path):
+    data = pd.DataFrame([{"refYear": 2023, "cmdCode": "8703", "primaryValue": 10}])
+    data.attrs.update(http_status=200, totalRecords=1, page=1, pages=1)
+    adapter = ComtradeAdapter(lambda **params: data, cache_dir=tmp_path,
+                              min_interval_s=0, max_retries=1, use_cache=False)
+    result = adapter.fetch_flows("12", "M", [2023], ["8703", "8704"], "0")
+    assert len(result) == 1
+    assert adapter.last_diagnostics["http_status"] == 200
+    assert adapter.last_diagnostics["total_count"] == 1
+    assert adapter.last_diagnostics["parameters"]["reporterCode"] == "12"
+    assert adapter.last_diagnostics["parameters"]["partnerCode"] == "0"
+    assert adapter.last_diagnostics["parameters"]["flowCode"] == "M"
+    assert adapter.last_diagnostics["parameters"]["cmdCode"] == "8703,8704"
+    assert adapter.last_diagnostics["parameters"]["period"] == "2023"
+
+    empty = pd.DataFrame()
+    empty.attrs.update(http_status=200, total_count=0)
+    empty_adapter = ComtradeAdapter(lambda **params: empty, cache_dir=tmp_path,
+                                    min_interval_s=0, max_retries=1, use_cache=False)
+    assert empty_adapter.fetch_flows("12", "M", [2023], ["8703", "8704"], "0").empty
+    assert empty_adapter.last_diagnostics["total_count"] == 0
+
+    def api_error(**params):
+        exc = ValueError("provider rejected request")
+        exc.code = 400
+        exc.payload = {"error": "bad query", "api_key": "never persist"}
+        raise exc
+
+    error_adapter = ComtradeAdapter(api_error, cache_dir=tmp_path, min_interval_s=0,
+                                    max_retries=1, use_cache=False)
+    with pytest.raises(RuntimeError, match="ValueError"):
+        error_adapter.fetch_flows("12", "M", [2023], ["8703", "8704"], "0")
+    assert error_adapter.last_diagnostics["http_status"] == 400
+    assert "never persist" not in str(error_adapter.last_diagnostics)
+    assert "REDACTED" in str(error_adapter.last_diagnostics["provider_error"])
+
+    transport_adapter = ComtradeAdapter(
+        lambda **params: (_ for _ in ()).throw(URLError("connection refused")),
+        cache_dir=tmp_path, min_interval_s=0, max_retries=1, use_cache=False,
+    )
+    with pytest.raises(RuntimeError, match="URLError"):
+        transport_adapter.fetch_flows("12", "M", [2023], ["8703", "8704"], "0")
+    assert transport_adapter.last_diagnostics["response"] == "ERROR"
+    assert transport_adapter.last_diagnostics["error_type"] == "URLError"
+
+
+def test_mie_adapter_preserves_each_preview_years_pagination_metadata(tmp_path, monkeypatch):
+    monkeypatch.delenv("COMTRADE_API_KEY", raising=False)
+
+    def fetch(**params):
+        frame = pd.DataFrame([{"period": params["period"], "primaryValue": 1}])
+        frame.attrs.update(http_status=200, total_count=int(params["period"]),
+                           page=1, pages=int(params["period"]) - 2020)
+        return frame
+
+    adapter = ComtradeAdapter(fetch, cache_dir=tmp_path, min_interval_s=0,
+                              max_retries=1, use_cache=False)
+    frame = adapter.fetch_flows("12", "M", [2021, 2022], ["8703", "8704"], "0")
+    requests = adapter.last_diagnostics["requests"]
+    assert len(frame) == 2
+    assert [item["parameters"]["period"] for item in requests] == ["2021", "2022"]
+    assert [item["total_count"] for item in requests] == [2021, 2022]
+    assert [item["pages"] for item in requests] == [1, 2]

@@ -34,7 +34,7 @@ Pytest settings, Ruff rules, and the mypy file list are maintained in `pyproject
 
 Do not change these without an explicit decision by the project owner:
 
-- `src/scoring/engine.py`: Model B weights and scoring logic.
+- `src/scoring/engine.py`: legacy compatibility scorers; canonical P04 logic is in `src/scoring/opportunity_scorer_b.py` and `src/scoring/p04_engine.py`.
 - `src/data/trade_pipeline.py`: trade retrieval behavior and provenance fields.
 - `src/data/reference/`: country reference data.
 
